@@ -1,23 +1,73 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import { setupCounter } from './counter'
+import {
+  WebGLRenderer,
+  Scene,
+  // BoxGeometry,
+  Mesh,
+  // MeshBasicMaterial,
+  PerspectiveCamera,
+  ShaderMaterial,
+  PlaneGeometry,
+  MathUtils,
+  Clock,
+} from "three";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+import fragment from "./shaders/liquid/fragment.frag";
+import vertex from "./shaders/liquid/vertex.vert";
+
+const canvas = document.querySelector("#webgl") as HTMLCanvasElement;
+
+const clock = new Clock();
+
+const scene = new Scene();
+const camera = new PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
+
+const renderer = new WebGLRenderer({
+  canvas: canvas,
+});
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+// Box
+// const geometry = new BoxGeometry(1, 1, 1);
+// const material = new MeshBasicMaterial({ color: 0x00ff00 });
+// const cube = new Mesh(geometry, material);
+// scene.add(cube);
+
+// Plane
+const planeGeo = new PlaneGeometry(3, 3, 100, 100);
+const planeMaterial = new ShaderMaterial({
+  uniforms: {
+    u_time: { value: 0 },
+  },
+  fragmentShader: fragment,
+  vertexShader: vertex,
+  wireframe: true,
+});
+const plane = new Mesh(planeGeo, planeMaterial);
+plane.rotateX(MathUtils.degToRad(90));
+
+scene.add(plane);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+
+camera.position.z = 2;
+camera.position.y = 3;
+camera.position.x = 3;
+
+function animate() {
+  requestAnimationFrame(animate);
+  planeMaterial.uniforms.u_time.value = clock.getElapsedTime();
+  // cube.rotation.x += 0.01;
+  // cube.rotation.y += 0.01;
+  controls.update();
+
+  renderer.render(scene, camera);
+}
+
+animate();
