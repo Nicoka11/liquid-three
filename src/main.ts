@@ -1,14 +1,13 @@
 import {
   WebGLRenderer,
   Scene,
-  // BoxGeometry,
   Mesh,
-  // MeshBasicMaterial,
   PerspectiveCamera,
   ShaderMaterial,
   PlaneGeometry,
   MathUtils,
   Clock,
+  DoubleSide,
 } from "three";
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -33,14 +32,8 @@ const renderer = new WebGLRenderer({
 });
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-// Box
-// const geometry = new BoxGeometry(1, 1, 1);
-// const material = new MeshBasicMaterial({ color: 0x00ff00 });
-// const cube = new Mesh(geometry, material);
-// scene.add(cube);
-
 // Plane
-const planeGeo = new PlaneGeometry(3, 3, 100, 100);
+const planeGeo = new PlaneGeometry(20, 20, 1500, 1500);
 const planeMaterial = new ShaderMaterial({
   uniforms: {
     u_time: { value: 0 },
@@ -48,6 +41,7 @@ const planeMaterial = new ShaderMaterial({
   fragmentShader: fragment,
   vertexShader: vertex,
   wireframe: true,
+  side: DoubleSide
 });
 const plane = new Mesh(planeGeo, planeMaterial);
 plane.rotateX(MathUtils.degToRad(90));

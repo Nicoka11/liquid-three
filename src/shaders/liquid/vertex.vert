@@ -1,6 +1,6 @@
 uniform float u_time;
 
-varying vec4 modelPosition;
+varying float v_posY;
 
 void main() {
   vec4 modelPosition = modelMatrix * vec4(position, 1.0);
@@ -10,5 +10,6 @@ void main() {
   vec4 viewPosition = viewMatrix * modelPosition;
   vec4 projectedPosition = projectionMatrix * viewPosition;
 
+  v_posY = modelPosition.y;
   gl_Position = projectedPosition;
 }
