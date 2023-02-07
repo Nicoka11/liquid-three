@@ -33,7 +33,7 @@ const renderer = new WebGLRenderer({
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 // Plane
-const planeGeo = new PlaneGeometry(20, 20, 1500, 1500);
+const planeGeo = new PlaneGeometry(20, 20, 150, 150);
 const planeMaterial = new ShaderMaterial({
   uniforms: {
     u_time: { value: 0 },
@@ -41,7 +41,7 @@ const planeMaterial = new ShaderMaterial({
   fragmentShader: fragment,
   vertexShader: vertex,
   wireframe: true,
-  side: DoubleSide
+  side: DoubleSide,
 });
 const plane = new Mesh(planeGeo, planeMaterial);
 plane.rotateX(MathUtils.degToRad(90));
