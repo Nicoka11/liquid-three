@@ -42,6 +42,7 @@ const planeMaterial = new ShaderMaterial({
   vertexShader: vertex,
   wireframe: true,
   side: DoubleSide,
+  glslVersion: 3,
 });
 const plane = new Mesh(planeGeo, planeMaterial);
 plane.rotateX(MathUtils.degToRad(90));
@@ -50,9 +51,7 @@ scene.add(plane);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
-camera.position.z = 2;
-camera.position.y = 3;
-camera.position.x = 3;
+camera.position.y = 25;
 
 function animate() {
   requestAnimationFrame(animate);
